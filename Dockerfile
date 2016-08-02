@@ -1,11 +1,14 @@
 FROM ubuntu
-RUN apt-get clean
-RUN mv /var/lib/apt/lists /var/lib/apt/lists.broke
-RUN mkdir -p /var/lib/apt/lists/partial
 RUN apt-get update
-RUN apt-get install -y postfix postfix-mysql dovecot-common dovecot-pop3d dovecot-imapd openssl dovecot-mysql mysql-server
+RUN echo "mysql-server mysql-server/root_password password mysqlpswd" | 'debconf-set-selections'
+RUN echo "mysql-server mysql-server/root_password_again password mysqlpswd" | 'debconf-set-selections'
+RUN echo "postfix postfix/mailname string localhost" | 'debconf-set-selections'
+RUN echo "postfix postfix/main_mailer_type string 'Internet Site'" | 'debconf-set-selections'
+RUN apt-get install -y rsyslog postfix postfix-mysql dovecot-common dovecot-pop3d dovecot-imapd openssl dovecot-mysql mysql-server
 ADD postfix /etc/postfix
 ADD dovecot /etc/dovecot
+ADD mailschema.sql /
+RUN chmod a+r /mailschema.sql
 RUN groupadd -g 5000 vmail && \
     useradd -g vmail -u 5000 vmail -d /home/vmail -m && \
     chgrp postfix /etc/postfix/mysql-*.cf && \
