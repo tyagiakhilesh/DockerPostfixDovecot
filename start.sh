@@ -55,5 +55,6 @@ chmod -R 777 /home/vmail
 rsyslogd 
 
 # run Postfix and Dovecot
+/usr/bin/mysqld_safe
 postfix start
 dovecot -F

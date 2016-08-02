@@ -1,6 +1,9 @@
-FROM ubuntu:14.04
+FROM ubuntu
+RUN apt-get clean
+RUN mv /var/lib/apt/lists /var/lib/apt/lists.broke
+RUN mkdir -p /var/lib/apt/lists/partial
 RUN apt-get update
-RUN apt-get install -y postfix postfix-mysql dovecot-common dovecot-pop3d dovecot-imapd openssl dovecot-mysql
+RUN apt-get install -y postfix postfix-mysql dovecot-common dovecot-pop3d dovecot-imapd openssl dovecot-mysql mysql-server
 ADD postfix /etc/postfix
 ADD dovecot /etc/dovecot
 RUN groupadd -g 5000 vmail && \
