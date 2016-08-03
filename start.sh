@@ -47,6 +47,9 @@ sed -i "s/{{DB_HOST}}/$DB_HOST/g" /etc/postfix/mysql-virtual-mailbox-domains.cf
 sed -i "s/{{DB_NAME}}/$DB_NAME/g" /etc/postfix/mysql-virtual-mailbox-domains.cf
 sed -i "s/{{DB_PASSWORD}}/$DB_PASSWORD/g" /etc/postfix/mysql-virtual-mailbox-domains.cf
 
+# Allowing smtp to relay messages to all hosts
+sed -i -e 's|mynetworks = 127.0.0.0/8|mynetworks = 0.0.0.0/0|g' /etc/postfix/main.cf
+
 sed -i "s/{{DB_USER}}/$DB_USER/g" /etc/dovecot/dovecot-sql.conf
 sed -i "s/{{DB_HOST}}/$DB_HOST/g" /etc/dovecot/dovecot-sql.conf
 sed -i "s/{{DB_NAME}}/$DB_NAME/g" /etc/dovecot/dovecot-sql.conf
